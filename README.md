@@ -89,16 +89,16 @@ In python-nmap library, it supports three kinds of input.
 When executing **main.py**:
 1. Well-known port scanning on target hosts, list open ports on every target hosts
 2. Parsing port scanning result and extracting 4 values about:
-* <product>: application product name
-* <version>: appplication version number
-* <name>: application service name
-* <ports>: application open port
+* [product]: application product name
+* [version]: appplication version number
+* [name]: application service name
+* [ports]: application open port
    
    Identifing by service name, if same service on different ports, then its will be conclude into same record and using ';' or ',' to delimit
-   * <products>: using ';' to delimit 
-   * <veriosns>: using ';' to delimit 
-   * <ports>: using ',' to delimit
-3. Storing extracted informations & values in *Dictionary Variable<dictPortScan>*. Format is:
+   * [products]: using ';' to delimit 
+   * [veriosns]: using ';' to delimit 
+   * [ports]: using ',' to delimit
+3. Storing extracted informations & values in *Dictionary Variable[dictPortScan]*. Format is:
 ```XML
 '192.168.107.129': {
   'ftp': {
@@ -109,7 +109,7 @@ When executing **main.py**:
 }
 ```
 4. Every open service will execute NSE brute script scanning(or HYDRA). 
-5. Scanning result will store back into <dictPortScan> variable. 
+5. Scanning result will store back into [dictPortScan] variable. 
    Result include port number, script name & scanning result.
 ```XML
   '192.168.107.129': {

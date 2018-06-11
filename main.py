@@ -243,7 +243,6 @@ def main():
       else: 
         nseScript.VNC(ip, dictPortScan[ip]['vnc']['ports'], dictPortScan[ip]['vnc'])
       print ('***Complete VNC brute force scan***')
-    '''
     # IRC Service
     if 'irc' in dictPortScan[ip].keys():
       print ('***Start IRC brute force scan***')
@@ -252,7 +251,6 @@ def main():
       else:         
         nseScript.IRC(ip, dictPortScan[ip]['irc']['ports'], dictPortScan[ip]['irc'])
       print ('***Complete IRC brute force scan***')
-    '''
     # Apache JServ Protocol Service
     if 'ajp13' in dictPortScan[ip].keys():
       print ('***Start Apache Jserv brute force scan***')

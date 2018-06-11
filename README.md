@@ -3,9 +3,36 @@
 # About #
 It will execute port scanning & identify service, then using **NMAP brute NSE script** & **other brute-force tools** (ex:HYDRA) focus on open ports and services, then find possible **USERNAME** & **PASSWORD**. 
  
-This tool include two python code file:
+This tool include 2 of python files & 2 of directories:
    1. *main.py*
    2. *NSE_Moudle.py*
+   3. *[dict]*
+   4. *[thc-hydra-windows-master]*
+   
+### main.py ###
+Main program. it included user arguments input, brute-force function call and print results (on command windows)
+
+### NSE_Moudle.py ###
+Brute-force function module. it included NSE script scan function & HYDRA function.
+
+BTW, if tool execute in Windows OS, there are settings in line 17~26:
+```python
+strHYDRA_Path = os.path.dirname(__file__) + '\\thc-hydra-windows-master\hydra.exe'
+strUserName_Path = '/dict/usernames.lst'
+strPassword_Path = '/dict/passwords.lst'
+```
+
+Otherwise, if tool execute in Linux KALI OS, there are settings in line 28~38:
+```python
+strHYDRA_Path = '/usr/bin/hydra'
+strUserName_Path = './dict/usernames.lst'
+strPassword_Path = './dict/passwords.lst'
+```
+### [dict] ###
+Dictionary files directory
+
+### [thc-hydra-windows-master] ###
+HYDRA tool directory. if tool excute in Windows OS, it will need this tool. But, if tool execute in LINUX KALI OS, it won't need this tool. (HYDRA already installed in KALI OS)
 
 ## Usage ##
 Type in command line:

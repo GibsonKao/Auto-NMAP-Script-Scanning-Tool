@@ -21,8 +21,7 @@ strHYDRA_Path = os.path.dirname(__file__) + '\\thc-hydra-windows-master\hydra.ex
 # UserName Dictionary File Path in Windows
 strUserName_Path = '/dict/usernames.lst'
 # Password Dictionary File Path in Windows
-# strPassword_Path = '/dict/passwords.lst'
-strPassword_Path = '/dict/usernames.lst' #temporary used file
+strPassword_Path = '/dict/passwords.lst'
 #-------- Windows --------
 
 #--------- Linux ---------
@@ -61,8 +60,7 @@ class NSE_Module:
       # -P <password_list_file>: using password dictionary file, strPassword_Path is Global Variable in NSE_Module.py
       # -o <output_file>: output to <output_file>. in this case, output file name format is "<ip>_<port>.txt"
       # -b JSON: output result format. in this case output file format is JSON
-      #processHYDRA = subprocess.Popen([strHYDRA_Path, '-L', strUserName_Path, '-P', strPassword_Path, '-o', strFile, '-b', 'json', strService])
-      processHYDRA = subprocess.Popen([strHYDRA_Path, '-l', 'user', '-p', 'user', '-o', strFile, '-b', 'json', strService])
+      processHYDRA = subprocess.Popen([strHYDRA_Path, '-L', strUserName_Path, '-P', strPassword_Path, '-o', strFile, '-b', 'json', strService])
       processHYDRA.wait()
       # Read result (json file) and Wrtie back to host
       # (In fact, host is dictPortScan variable in main.py)

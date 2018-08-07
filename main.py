@@ -34,10 +34,15 @@ nseScript = NSE_Module()
 #---- main function ----
 #-----------------------
 def main():
+  # Welcome Message
+  print ('Auto-NMAP Script Scaning Tool Starting...')
   # start nmap scan, 1st argument is IP address, 
   # command: nmap -oX - -sV <strIP_Address>
   # nmScan.scan(strIP_Address)
-  nmScan.scan(args.HOST_IP)
+  RawData = nmScan.scan(args.HOST_IP, arguments='-sV -O')
+  # Write NMAP RAW Data into JSON file
+  with open('nmap_rawdata.txt', 'w+') as outfile:  
+    json.dump(RawData, outfile)
   # List all hosts using for loop
   # nmScan.all_hosts() will list all scanned hosts
   # variable:host is one of scanned hosts, value is IP_Address
@@ -47,6 +52,10 @@ def main():
     print('Host : %s (%s)' % (host, nmScan[host].hostname())) 
     # index: nmScan[<IP>]['status']['state']
     print('State : %s' % nmScan[host].state()) 
+    # Get OS information from [host]['osmatch'][ArrayIndex]['osclass'][ArrayIndex]['osfamily']
+    # To Do: If Scanning results had multi os match results, it should change into for loop to get OS info
+    strOS = nmScan[host]['osmatch'][0]['osclass'][0]['osfamily']
+    dictPortScan[host] = {'OS':strOS}
     # List all protocol on host using for loop
     # nmScan[host].all_protocols() will list all of protocols on host
     # variable:proto is one of scanned hosts, value is tcp || udp
@@ -81,7 +90,6 @@ def main():
   
     # append dictService into dictPortScan[<host_IP>]
     dictPortScan[host] = dictService
-  print dictPortScan 
   
   for ip in dictPortScan.keys():
     # FTP Service
@@ -125,10 +133,24 @@ def main():
     # HTTP Service
     if 'http' in dictPortScan[ip].keys():
       print ('***Start HTTP brute force scan***')
-      nseScript.HTTP(ip, dictPortScan[ip]['http']['ports'], dictPortScan[ip]['http'])
-      # To do: If found web service, call W3AF to do web vulnerablility scan
-      # HYDRA is support HTTP(S) service, but have to choose http-{head|get|post} method or http-{get|post}-form method
-      # So that's need to customize for HTTP(S) service
+      # Using <http-auth-finder> to find authentication form
+      # Function returned a list of authentication form, listPath is temporary variable to store returned value
+      listPath = nseScript.HTTP_Auth_Finder(ip, dictPortScan[ip]['http']['ports'], dictPortScan[ip]['http'])
+      # Initial dictPortScan[ip]['http']['scripts'], data type is array
+      dictPortScan[ip]['http']['scripts'] = []
+      # In list, format is port/path, so using '/' to split.
+      # Reason of split('/', 1) is only need to split port & path. Keep other '/'symbol in path
+      for path in listPath:
+        listurl = path.split('/', 1)
+        # Every list after split, send to HTTP_FORM function (IP, port, path, host_info)
+        if "wordpress" in str(listurl[1]):
+          nseScript.HTTP_WORDPRESS(ip, str(listurl[0]), '/' + str(listurl[1]), dictPortScan[ip]['http']['scripts'])
+        else:
+          nseScript.HTTP_FORM(ip, str(listurl[0]), '/' + str(listurl[1]), dictPortScan[ip]['http']['scripts'])
+      # To do: 
+      #   If found web service, call W3AF to do web vulnerablility scan
+      #   HYDRA is support HTTP(S) service, but have to choose http-{head|get|post} method or http-{get|post}-form method
+      #   So that's need to customize for HTTP(S) service
       print ('***Complete HTTP brute force scan***')
     # POP3 Service
     if 'pop3' in dictPortScan[ip].keys():
@@ -244,6 +266,7 @@ def main():
         nseScript.VNC(ip, dictPortScan[ip]['vnc']['ports'], dictPortScan[ip]['vnc'])
       print ('***Complete VNC brute force scan***')
     # IRC Service
+    '''
     if 'irc' in dictPortScan[ip].keys():
       print ('***Start IRC brute force scan***')
       if args.opt == 'HYDRA': 
@@ -251,6 +274,7 @@ def main():
       else:         
         nseScript.IRC(ip, dictPortScan[ip]['irc']['ports'], dictPortScan[ip]['irc'])
       print ('***Complete IRC brute force scan***')
+    '''
     # Apache JServ Protocol Service
     if 'ajp13' in dictPortScan[ip].keys():
       print ('***Start Apache Jserv brute force scan***')
@@ -271,7 +295,10 @@ def main():
       nseScript.DRDA(ip, dictPortScan[ip]['drda']['ports'], dictPortScan[ip]['drda'])
       # HYDRA is not support DRDA service
       print ('***Complete IBM DB2 (DRDA) brute force scan***')
-  print dictPortScan      
+  #print dictPortScan
+  # Wrtie Scanning Result into file (JSON Format)
+  with open('scan_result.json', 'w+') as outfile:  
+    json.dump(dictPortScan, outfile)  
   
 if __name__ =="__main__":
   main()

@@ -13,11 +13,6 @@ from NSE_Module import *  #Costumize Module
 #-----------------------
 #--- Variable Define ---
 #-----------------------
-#--- String variable ---
-'''
-#User input for IP address
-strIP_Address = raw_input("Enter IP address: ")
-'''
 #--- Arguments variable ---
 parser = ArgumentParser(description='Auto-NMAP Script Scaning Tool using NMAP NSE script to brute-force on open port and service, its based on port scanning result.', epilog='See the about&doc: https://hackmd.io/37N0NZXdQjWqZreM6EIYwQ')
 parser.add_argument('HOST_IP', help='Target HOST IP Address')
@@ -39,10 +34,12 @@ def main():
   # start nmap scan, 1st argument is IP address, 
   # command: nmap -oX - -sV <strIP_Address>
   # nmScan.scan(strIP_Address)
+  processNMAP = subprocess.Popen(['nmap', '-Pn', args.HOST_IP, '-sV', '-sC', '-O', '-oX', 'ScanResult.xml'])
+  processNMAP.wait()
   RawData = nmScan.scan(args.HOST_IP, arguments='-sV -O')
   # Write NMAP RAW Data into JSON file
-  with open('nmap_rawdata.txt', 'w+') as outfile:  
-    json.dump(RawData, outfile)
+  #with open('nmap_rawdata.txt', 'w+') as outfile:  
+  #  json.dump(RawData, outfile)
   # List all hosts using for loop
   # nmScan.all_hosts() will list all scanned hosts
   # variable:host is one of scanned hosts, value is IP_Address
@@ -265,8 +262,8 @@ def main():
       else: 
         nseScript.VNC(ip, dictPortScan[ip]['vnc']['ports'], dictPortScan[ip]['vnc'])
       print ('***Complete VNC brute force scan***')
-    # IRC Service
     '''
+    # IRC Service
     if 'irc' in dictPortScan[ip].keys():
       print ('***Start IRC brute force scan***')
       if args.opt == 'HYDRA': 
@@ -297,8 +294,11 @@ def main():
       print ('***Complete IBM DB2 (DRDA) brute force scan***')
   #print dictPortScan
   # Wrtie Scanning Result into file (JSON Format)
-  with open('scan_result.json', 'w+') as outfile:  
-    json.dump(dictPortScan, outfile)  
+  with open('ScanResult.json', 'w+') as outfile:  
+    json.dump(dictPortScan, outfile)
+  # Re-name Scan Result File    
+  os.rename('ScanResult.xml', args.HOST_IP+'.xml')
+  os.rename('ScanResult.json', args.HOST_IP+'.json')
   
 if __name__ =="__main__":
   main()

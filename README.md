@@ -15,19 +15,6 @@ Main program. it included user arguments input, brute-force function call and pr
 ### NSE_Moudle.py ###
 Brute-force function module. it included NSE script scan function & HYDRA function.
 
-BTW, if tool execute in Windows OS, there are settings in line 17~26:
-```python
-strHYDRA_Path = os.path.dirname(__file__) + '\\thc-hydra-windows-master\hydra.exe'
-strUserName_Path = '/dict/usernames.lst'
-strPassword_Path = '/dict/passwords.lst'
-```
-
-Otherwise, if tool execute in Linux KALI OS, there are settings in line 28~38:
-```python
-strHYDRA_Path = '/usr/bin/hydra'
-strUserName_Path = './dict/usernames.lst'
-strPassword_Path = './dict/passwords.lst'
-```
 ### [dict] ###
 Dictionary files directory
 
@@ -66,21 +53,6 @@ From the shell, uncompress python-nmap-0.4.0.tar.gz and then run make:
 cd python-nmap-0.6.1
 python setup.py install*
 
-## Usage ##
-
-In python-nmap library, it supports three kinds of input.
-1. *Only IP address*: Port scanning on well-known with service version check
-   python code sample: **nm.scan('127.0.0.1')**
-   nmap command: **nmap -oX - -sV 127.0.0.1**
-
-2. *IP address with port number (or port range)*: Port scanning on specified ports
-   python code sample: **nm.scan('127.0.0.1', '22-443')**
-   nmap command: **nmap -oX - -p 22-443 -sV 127.0.0.1**
-
-3. *IP address with arguments*: Port scanning with arguments action.
-   python code sample: **nm.scan('127.0.0.1', arguments='-p 21 -script=ftp-brute')**
-   nmap command: **nmap -oX - -p 21 -script=ftp-brute -sV 127.0.0.1**
- 
 ---
   
 # Auto-NMAP Script Scanning Tool #

@@ -1,5 +1,20 @@
 # Auto-NMAP Script Scanning Tool Using Python NMAP Library #
 
+## Usage ##
+Type in command line:
+* python main.py HOST_IP [-h] [-o HYDRA]
+* [EXAMPLE 1]: *python main.py 127.0.0.1*
+* [EXAMPLE 2]: *python main.py 127.0.0.1 -o HYDRA*
+
+  **positional arguments:**
+  *  HOST_IP:  Target HOST IP Address
+
+  **optional arguments:**
+  *  -h, --help: Show this help message and exit
+  *  -o OPT: Using other tools brute-force, OPT is tool's name. Support tool lists: HYDRA
+
+---
+
 # About #
 It will execute port scanning & identify service, then using **NMAP brute NSE script** & **other brute-force tools** (ex:HYDRA) focus on open ports and services, then find possible **USERNAME** & **PASSWORD**. 
  
@@ -20,19 +35,6 @@ Dictionary files directory
 
 ### [thc-hydra-windows-master] ###
 HYDRA tool directory. if tool excute in Windows OS, it will need this tool. But, if tool execute in LINUX KALI OS, it won't need this tool. (HYDRA already installed in KALI OS)
-
-## Usage ##
-Type in command line:
-* python main.py HOST_IP [-h] [-o HYDRA]
-* [EXAMPLE 1]: *python main.py 127.0.0.1*
-* [EXAMPLE 2]: *python main.py 127.0.0.1 -o HYDRA*
-
-  **positional arguments:**
-  *  HOST_IP:  Target HOST IP Address
-
-  **optional arguments:**
-  *  -h, --help: Show this help message and exit
-  *  -o OPT: Using other tools brute-force, OPT is tool's name. Support tool lists: HYDRA
 
 ---
   
